@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:fluttertest/util/util.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'actionButtons.dart';
@@ -15,14 +16,14 @@ class AssetCountingWidget extends StatefulWidget {
 }
 
 class _AssetCountingWidgetState extends State<AssetCountingWidget> {
-     _AssetCountingWidgetState(){
+  _AssetCountingWidgetState() {
     oriAssets = createAssets();
     assets = oriAssets;
     _scrollController = ScrollController();
-    } 
-  late List<Asset> oriAssets ;
-  late List<Asset> assets ;
-  var _scrollController ;
+  }
+  late List<Asset> oriAssets;
+  late List<Asset> assets;
+  var _scrollController;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +37,7 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
           ),
           onChanged: (value) {
             setState(() {
-              assets=filterAssets(value);
+              assets = _filterAssets(value);
             });
           },
         ),
@@ -52,7 +53,7 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
                     subtitle: Text(
                       '品名: ${assets[index].asset_name}',
                       style: TextStyle(
-                          color: assets[index].asset_name.endsWith("V")
+                          color: assets[index].counted
                               ? Colors.red
                               : Colors.blue, // Change color here
                           fontWeight: FontWeight.bold, // Make it bold
@@ -67,40 +68,59 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
             padding: EdgeInsets.symmetric(vertical: 0),
             child: AssetListActions(
               onScanBarcode: () => _scanBarcode(context),
+              onClearCounted: () => _clearCounted(),
             )),
       ],
     );
   }
 
   Future<void> _scanBarcode(BuildContext context) async {
-    String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+    String readBarcode = await FlutterBarcodeScanner.scanBarcode(
         '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-
-    if (barcodeScanRes != '-1') {
-      Fluttertoast.showToast(
-        msg: getAssetReadMsg(barcodeScanRes),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+    if (readBarcode != '-1') {
+      var readMessage = _setReadAndReadMsg(readBarcode);
+      showMessageDialog(context, readMessage, "已讀訊息");
+      setState(() {});
     }
   }
 
-  String getAssetReadMsg(String barcodeScanRes) {
+  String _setReadAndReadMsg(String readBarcode) {
     String ret = "";
     for (int i = 0; i < oriAssets.length; i++) {
-      if (oriAssets[i].asset_id == barcodeScanRes) {
-        ret = "已讀取:${oriAssets[i].asset_name}";
-        oriAssets[i].asset_name = "${oriAssets[i].asset_name} V";
+      if (oriAssets[i].asset_id == readBarcode) {
+        ret = "${oriAssets[i].asset_id}\n${oriAssets[i].asset_name}";
+        oriAssets[i].counted = true;
         continue;
       }
     }
     if (ret == "") return "找不到相關資產.";
-    setState(() {});
     return ret;
+  }
+
+  List<Asset> _filterAssets(String query) {
+    if (query.isEmpty) {
+      return oriAssets;
+    }
+
+    return oriAssets.where((asset) {
+      final nameLower = asset.asset_name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      final idLower = asset.asset_id.toLowerCase();
+
+      return nameLower.contains(queryLower) || idLower.contains(queryLower);
+    }).toList();
+  }
+
+  _clearCounted() {
+    showConfirmationDialog(
+        context,
+        "確認",
+        "確認刪除盤點資料?",
+        () => setState(() {
+              oriAssets.forEach((element) {
+                element.counted = false;
+              });
+            }));
   }
 
   static List<Asset> createAssets() {
@@ -123,19 +143,5 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
     assets.insert(0, Asset("8762929", 'Office 365'));
     assets.add(Asset("8762610", '投影機'));
     return assets;
-  }
-
-   List<Asset> filterAssets( String query) {
-    if (query.isEmpty) {
-      return oriAssets;
-    }
-
-    return oriAssets.where((asset) {
-      final nameLower = asset.asset_name.toLowerCase();
-      final queryLower = query.toLowerCase();
-      final idLower = asset.asset_id.toLowerCase();
-
-      return nameLower.contains(queryLower) || idLower.contains(queryLower);
-    }).toList();
   }
 }

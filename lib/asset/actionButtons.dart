@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AssetListActions extends StatelessWidget {
-  const AssetListActions({Key? key, required this.onScanBarcode}) : super(key: key);
+  const AssetListActions(
+      {Key? key, required this.onScanBarcode, required this.onClearCounted})
+      : super(key: key);
 
   final VoidCallback onScanBarcode;
+  final VoidCallback onClearCounted;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +38,9 @@ class AssetListActions extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    // Add your code here
+                    onClearCounted();
                   },
-                  icon: Icon(Icons.flashlight_on),
+                  icon: Icon(Icons.refresh),
                   color: Colors.white,
                 ),
               ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertest/login/loginUser.dart';
+import 'config/appStorage.dart';
+import 'util/util.dart';
 import 'asset/assetCountingPage.dart';
+import 'login/loginUtil.dart';
 
 void main() {
   runApp(const MyApp(key: Key('main')));
@@ -31,7 +35,22 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _login() async {
+    try {
+      await login(_usernameController.text, _passwordController.text);
+      LoginUser? loginUser;
+      loginUser=await retrieveLoginUser() ;
+      if (loginUser != null) {
+       showMessage(loginUser.username);
+      }
+
+      navToCounterPage();
+    } on Exception catch (e) {
+      showMessage(getErrMessage(e));
+    }
+  }
+
+  void navToCounterPage() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AssetCountingPage()),
@@ -70,13 +89,13 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               textInputAction: TextInputAction.done,
               onSubmitted: (_) {
-                _submit();
+                _login();
               },
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               child: Text('登入'),
-              onPressed: _submit,
+              onPressed: _login,
             ),
           ],
         ),
