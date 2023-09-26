@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'asset/assetCountingPage.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp(key: Key('main')));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,12 +15,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: LoginPage(),
+      home: const LoginPage(key: Key('loginPage')),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -27,51 +32,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _submit() {
-    final String username = _usernameController.text.trim();
-    final RegExp emailRegex =
-        RegExp(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
-
-    if (!emailRegex.hasMatch(username)) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('非正確的Email格式！'),
-            content: Text('請輸入正確的Email.'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('登入成功'),
-          content: Text('您已成功登入系統.'),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _usernameController.clear();
-                _passwordController.clear();
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-            ),
-          ],
-        );
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AssetCountingPage()),
     );
   }
 
