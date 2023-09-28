@@ -20,7 +20,7 @@ class _AssetCountingPageState extends State<AssetCountingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('盤點作業(${loginUser.username})'),
+        title: Text('盤點作業(${loginUser!=null? loginUser.username:""})'),
       ),
       body: const AssetCountingWidget(),
     );

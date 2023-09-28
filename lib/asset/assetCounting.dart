@@ -128,20 +128,20 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
     final assets = List.generate(
       10000,
       (index) => Asset(
-        '${random.nextInt(10000000)}',
-        'Asset ${index + 1}',
+        asset_id: '${random.nextInt(10000000)}',
+        asset_name:'Asset ${index + 1}',
       ),
     );
 
-    assets.insert(0, Asset("8762921", '乾燥機'));
-    assets.insert(0, Asset("8762622", '桌上型電腦'));
-    assets.insert(0, Asset("8762923", 'Asus筆電'));
-    assets.insert(0, Asset("8762624", 'Acer筆電'));
-    assets.insert(0, Asset("8762925", 'Tableau Server'));
-    assets.insert(0, Asset("8762926", 'Nvidia 顯卡'));
-    assets.insert(0, Asset("8762627", '印表機'));
-    assets.insert(0, Asset("8762929", 'Office 365'));
-    assets.add(Asset("8762610", '投影機'));
+    assets.insert(0, Asset(asset_id: "8762921",asset_name: '乾燥機'));
+    assets.insert(0, Asset(asset_id: "8762622", asset_name: '桌上型電腦'));
+    assets.insert(0, Asset(asset_id: "8762923", asset_name: 'Asus筆電'));
+    assets.insert(0, Asset(asset_id: "8762624", asset_name: 'Acer筆電'));
+    assets.insert(0, Asset(asset_id: "8762925", asset_name: 'Tableau Server'));
+    assets.insert(0, Asset(asset_id: "8762926", asset_name: 'Nvidia 顯卡'));
+    assets.insert(0, Asset(asset_id: "8762627", asset_name: '印表機'));
+    assets.insert(0, Asset(asset_id: "8762929", asset_name: 'Office 365'));
+    assets.add(Asset(asset_id: "8762610", asset_name: '投影機'));
     return assets;
   }
 }

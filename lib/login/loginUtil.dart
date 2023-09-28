@@ -5,7 +5,7 @@ import 'package:fluttertest/login/loginUser.dart';
 import 'package:http/http.dart' as http;
 
 Future<LoginUser> login(String username, String password) async {
-  final url = Uri.parse(SERVER_URL);
+  final url = Uri.parse(SERVER_GET_JWT);
   final headers = {'Content-Type': 'application/json; charset=utf-8'};
   final body = json.encode({
     'notesId': username,

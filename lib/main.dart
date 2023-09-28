@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
 
       navToCounterPage();
     } on Exception catch (e) {
-      showMessage(getErrMessage(e));
+      showMessage(getMessageFromException(e));
     }
   }
 

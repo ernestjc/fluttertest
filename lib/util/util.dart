@@ -13,7 +13,7 @@ void showMessage(String msg) {
   );
 }
 
-String getErrMessage(Exception e) {
+String getMessageFromException(Exception e) {
   return e.toString().replaceAll(new RegExp(r'Exception: '), '');
 }
 
@@ -31,16 +31,22 @@ void showMessageDialog(BuildContext context, String message, String title) {
             },
           ),
         ],
-        title: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 1, 91, 82),
+        title: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.0),
+            topRight: Radius.circular(4.0),
           ),
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 1, 91, 82),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),
             ),
           ),
         ),
@@ -56,16 +62,22 @@ void showConfirmationDialog(BuildContext context, String title, String message,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 1, 91, 82),
+        title: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.0),
+            topRight: Radius.circular(4.0),
           ),
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 1, 91, 82),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),
             ),
           ),
         ),
