@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertest/asset/datagw/assetDataGW.dart';
-import 'package:fluttertest/util/util.dart';
 
 class AssetListActions extends StatelessWidget {
   const AssetListActions(
-      {Key? key, required this.onScanBarcode, required this.onClearCounted})
+      {Key? key,
+      required this.onScanBarcode,
+      required this.onClearCounted,
+      required this.onDownloadAssets,
+      required this.onGenSampleAssets})
       : super(key: key);
 
   final VoidCallback onScanBarcode;
   final VoidCallback onClearCounted;
+  final VoidCallback onDownloadAssets;
+  final VoidCallback onGenSampleAssets;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class AssetListActions extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-               const SizedBox(width: 6),
+              const SizedBox(width: 6),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -40,7 +44,7 @@ class AssetListActions extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                  downloadAssets();
+                    onDownloadAssets();
                   },
                   icon: Icon(Icons.download),
                   color: Colors.white,
@@ -68,9 +72,9 @@ class AssetListActions extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    // Add your code here
+                    onGenSampleAssets();
                   },
-                  icon: Icon(Icons.nfc),
+                  icon: Icon(Icons.data_array),
                   color: Colors.white,
                 ),
               ),
@@ -191,11 +195,5 @@ class AssetListActions extends StatelessWidget {
         ),
       ),
     );
-  }
-  
-  void downloadAssets() {
-    fetchAllAssets().then((value) => {
-      showMessage(value.toString())
-    });
   }
 }

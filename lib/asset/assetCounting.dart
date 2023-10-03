@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:fluttertest/asset/datagw/assetDataGW.dart';
 import 'package:fluttertest/util/util.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'actionButtons.dart';
 import 'ent/asset.dart';
 
@@ -17,7 +16,7 @@ class AssetCountingWidget extends StatefulWidget {
 
 class _AssetCountingWidgetState extends State<AssetCountingWidget> {
   _AssetCountingWidgetState() {
-    oriAssets = createAssets();
+    oriAssets = createAssetsSamples();
     assets = oriAssets;
     _scrollController = ScrollController();
   }
@@ -69,6 +68,8 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
             child: AssetListActions(
               onScanBarcode: () => _scanBarcode(context),
               onClearCounted: () => _clearCounted(),
+              onDownloadAssets: () => _downloadAssets(),
+              onGenSampleAssets: () => _genSampleAssets(),
             )),
       ],
     );
@@ -123,17 +124,17 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
             }));
   }
 
-  static List<Asset> createAssets() {
+  static List<Asset> createAssetsSamples() {
     final random = Random();
     final assets = List.generate(
       10000,
       (index) => Asset(
         asset_id: '${random.nextInt(10000000)}',
-        asset_name:'Asset ${index + 1}',
+        asset_name: 'Asset ${index + 1}',
       ),
     );
 
-    assets.insert(0, Asset(asset_id: "8762921",asset_name: '乾燥機'));
+    assets.insert(0, Asset(asset_id: "8762921", asset_name: '乾燥機'));
     assets.insert(0, Asset(asset_id: "8762622", asset_name: '桌上型電腦'));
     assets.insert(0, Asset(asset_id: "8762923", asset_name: 'Asus筆電'));
     assets.insert(0, Asset(asset_id: "8762624", asset_name: 'Acer筆電'));
@@ -143,5 +144,27 @@ class _AssetCountingWidgetState extends State<AssetCountingWidget> {
     assets.insert(0, Asset(asset_id: "8762929", asset_name: 'Office 365'));
     assets.add(Asset(asset_id: "8762610", asset_name: '投影機'));
     return assets;
+  }
+
+  void _downloadAssets() {
+    showConfirmationDialog(
+        context, "確定", "確定下載資產資料?", () => _fetchAndSetAssets());
+  }
+
+  void _fetchAndSetAssets() {
+    fetchAllAssets().then(
+        (value) => {oriAssets = value, assets = oriAssets, setState(() {})});
+  }
+
+  _genSampleAssets() {
+    showConfirmationDialog(
+        context,
+        "確認",
+        "確認產生測試資料?",
+        () => {
+              oriAssets = createAssetsSamples(),
+              assets = oriAssets,
+              setState(() {}),
+            });
   }
 }
